@@ -1,17 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Assembly | My Octopress Blog]]></title>
+  <title><![CDATA[Category: Assembly | Betrayal of the red mango]]></title>
   <link href="http://ericfode.github.com/blog/categories/assembly/atom.xml" rel="self"/>
   <link href="http://ericfode.github.com/"/>
-  <updated>2012-07-30T17:58:25-04:00</updated>
+  <updated>2012-07-31T12:15:20-04:00</updated>
   <id>http://ericfode.github.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Eric Fode]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Radare2 (R2)]]></title>
+    <link href="http://ericfode.github.com/blog/2012/07/30/radare2-r2/"/>
+    <updated>2012-07-30T17:13:00-04:00</updated>
+    <id>http://ericfode.github.com/blog/2012/07/30/radare2-r2</id>
+    <content type="html"><![CDATA[<h1>Radare2 (R2) debugging assembly is fun.</h1>
+
+<p>Before I stumbled over r2 when I had to debug assembly it was a task to be dreaded with out the help of something like IDA pro. Unfortunately I can't always have things I want (expensive software licenses in this case), so I went out in search of an open source alternative. I was pleasantly surprised by the epic software that I found. Radare and it's suite. Radare is a suite of tools designed to perform disassembly, assembly, analysis, cryptanalysis, patching, and a whole smorgasboard of other awesome operations on binaries. The whole suite of tools is crowned by it's tool R2. R2 is a tool that brings all of the other unix-style tools in the suite together.</p>
+
+<p>Some of the highlights
+Debugging with radare's internal debugger
+<code>
+$ r2 -d /path/to/exec
+</code></p>
+
+<p>Setting break point
+<code>
+[0xb7edcf99]&gt; db symbol
+[0xb7edcf99]&gt; db address
+</code>
+Either option can be used. Symbols are accessed with sym.symbolName for example
+<code>
+[0xb7edcf99]&gt; db sym.main
+</code></p>
+
+<p>Viewing the function that radare has seeked to (generally where eip is unless you manually seek)
+<code>
+[0xb7edcf99]&gt; pdf
+</code>
+Will show the current function  (menomic print disassembly of function block)</p>
+
+<p>Analyzing the current function for structure
+```
+[0xb7edcf99]> af
+[0xb7edcf99]> pdf</p>
+
+<p>|      0x080484b5     8b45f4           mov eax, [ebp-0xc]
+|      0x080484b8     25000000bf       and eax, 0xbf000000
+|      0x080484bd     3d000000bf       cmp eax, 0xbf000000
+|  ,=&lt; 0x080484c2     7520             jnz loc.080484e4
+|  |   0x080484c4     b8e4850408       mov eax, str.bzzztp
+|  |   0x080484c9     8b55f4           mov edx, [ebp-0xc]
+|  |   0x080484cc     89542404         mov [esp+0x4], edx
+|  |   0x080484d0     890424           mov [esp], eax
+|  |   0x080484d3     e8e8feffff       call dword 0x80483c0
+|  |      ; imp.printf() (imp.printf+0)
+|  |   0x080484d8     c7042401000000   mov dword [esp], 0x1
+|  |   0x080484df     e8bcfeffff       call dword imp.<em>exit
+|  |      ; imp.</em>exit() (imp._exit+0)
+|  |   ; CODE (JMP) XREF 0x080484c2 (eip)
+/ loc: loc.080484e4 (22)
+|  |   0x080484e4  loc.080484e4:
+|  `-> 0x080484e4     b8f0850408       mov eax, str.gotpaths
+|      0x080484e9     8d55b4           lea edx, [ebp-0x4c]
+|      0x080484ec     89542404         mov [esp+0x4], edx
+```
+af tells radare to analyze the current function block (analyzing the whole piece of software can take along time) and creates lots of pretty blocks like the one shown to help you find where things jump to and see functions better.</p>
+
+<p>Finding things</p>
+
+<p>You can quckly locate function symbols with by running x on a sym.name
+<code>
+[0xb7edcf99]&gt; x@sym.main
+[0xb7edcf99]&gt; pdf@sym.main
+</code>
+the @ symbol tell radare to seek temporarily and perform the operation at a memory address.</p>
+
+<p>Find a ROP gadaget:
+radare can do magical things, one of them is compile assmebly on the fly (for what ever arch you happen to be using) and search for it's bytes. This can be done as follows
+```
+[0xb7edcf99]> s sym.main #or where ever you want to search
+[0xb7edcf99]> /a pop eax; ret; #this will start the seach i stop it with ^C because it can take for ever and genrally finds things quickly
+[# ]<sup>C0x0cb7e190</sup> &lt; 0xffffffffffffffff  hits = 0</p>
+
+<p>hits: 0
+hit1_0
+hit1_1
+hit1_2
+hit1_3
+hit1_4
+[0xb7edcf99]>f #displays all current flags (of which the hits will be)
+0x08049644 1 hit1_4
+0x0804935c 1 hit1_3
+0x08049020 1 hit1_2
+0x08048baa 1 hit1_1
+0x08048644 1 hit1_0
+```</p>
+
+<p>All of radares find commands can be accessed through the / command (think perl regex)</p>
+
+<p><code>
+[0xb7edcf99]&gt; x@sym.main
+</code></p>
+
+<p>Speaking of seeking
+<code>
+[0xb7edcf99]&gt; s sym.main
+</code></p>
+
+<p>This will move radare's "cursor around"</p>
+
+<p>More to come</p>
+
+<p>Things i need to figure out:
+how to start a debug process with out restarting radare
+how to redirect input
+how to trace a variable
+how to find symbol names
+how to name memory locations (i think flags will do this)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Intro To Ragg2]]></title>
@@ -726,6 +838,44 @@ $ ragg2 -L
 This will list the exploits currently installed with ragg2</p>
 
 <p>Using ragg to generate shell code from custom files (your own c or .r files) will be the topic of a later post.</p>
+
+<p>Demos of all of these attacks can be found here:
+codestre.am</p>
+
+<p>http://codestre.am/8c5e93537f89fbdcfc247fd44 (Stack1)
+http://codestre.am/1caa63719bec0fb81dec03c26 (Stack2)
+http://codestre.am/3dc50f4450897c68b95117542 (Stack3)
+http://codestre.am/8e25a916f5ff40088a7d3d1ee (Stack4)
+http://codestre.am/6152c18aa872373c4e6142f3b (Stack5)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Radare2 (R2) Install]]></title>
+    <link href="http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar/"/>
+    <updated>2012-07-30T17:13:00-04:00</updated>
+    <id>http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar</id>
+    <content type="html"><![CDATA[<h1>Installing</h1>
+
+<p>Yes I know you can figure it out on your own... but who want to think if they dont have to.</p>
+
+<p>```</p>
+
+<h1>install dependcies</h1>
+
+<p>$ apt-get install flex bison</p>
+
+<h1>download repo</h1>
+
+<p>$ git clone https://github.com/radare/radare2.git radare2</p>
+
+<h1>compile and install</h1>
+
+<p>$ cd ./radare2
+$ ./configure --prefix=/usr
+$ make
+$ make install (or symstall)
+```</p>
 ]]></content>
   </entry>
   

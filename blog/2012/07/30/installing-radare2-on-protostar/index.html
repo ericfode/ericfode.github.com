@@ -5,11 +5,21 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Radare - Betrayal of the red mango</title>
+  <title>Radare2 (R2) Install - Betrayal of the red mango</title>
   <meta name="author" content="Eric Fode">
 
   
-  <meta name="description" content="Category: Radare">
+  <meta name="description" content="Installing Yes I know you can figure it out on your own&#8230; but who want to think if they dont have to. 1
+2
+3
+4
+5
+6
+7
+8
+9
+#install dependcies
+$ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +28,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://ericfode.github.comblog/categories/radare/">
+  <link rel="canonical" href="http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,64 +73,113 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Radare</h1>
+    
+      <h1 class="entry-title">Radare2 (R2) Install</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T17:13:00-04:00" pubdate data-updated="true">Jul 30<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><h1>Installing</h1>
 
-  
-  <h2>2012</h2>
+<p>Yes I know you can figure it out on your own&#8230; but who want to think if they dont have to.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/07/30/radare2-r2/">Radare2 (R2)</a></h1>
-<time datetime="2012-07-30T17:13:00-04:00" pubdate><span class='month'>Jul</span> <span class='day'>30</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/assembly/'>Assembly</a>, <a class='category' href='/blog/categories/hacking/'>Hacking</a>, <a class='category' href='/blog/categories/radare/'>Radare</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/07/30/intro-to-ragg2/">Intro To Ragg2</a></h1>
-<time datetime="2012-07-30T17:13:00-04:00" pubdate><span class='month'>Jul</span> <span class='day'>30</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/assembly/'>Assembly</a>, <a class='category' href='/blog/categories/hacking/'>Hacking</a>, <a class='category' href='/blog/categories/radare/'>Radare</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/07/30/installing-radare2-on-protostar/">Radare2 (R2) Install</a></h1>
-<time datetime="2012-07-30T17:13:00-04:00" pubdate><span class='month'>Jul</span> <span class='day'>30</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/assembly/'>Assembly</a>, <a class='category' href='/blog/categories/hacking/'>Hacking</a>, <a class='category' href='/blog/categories/radare/'>Radare</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#install dependcies
+</span><span class='line'>$ apt-get install flex bison
+</span><span class='line'>#download repo
+</span><span class='line'>$ git clone https://github.com/radare/radare2.git radare2
+</span><span class='line'>#compile and install
+</span><span class='line'>$ cd ./radare2
+</span><span class='line'>$ ./configure --prefix=/usr
+</span><span class='line'>$ make
+</span><span class='line'>$ make install (or symstall)</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Fode (YodaCoder)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T17:13:00-04:00" pubdate data-updated="true">Jul 30<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/assembly/'>Assembly</a>, <a class='category' href='/blog/categories/hacking/'>Hacking</a>, <a class='category' href='/blog/categories/radare/'>Radare</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar/" data-via="ericfode" data-counturl="http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/30/intro-to-ragg2/" title="Next Post: Intro To Ragg2">Intro To Ragg2 &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -233,7 +292,10 @@
       var disqus_shortname = 'ericfode';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar/';
+        var disqus_url = 'http://ericfode.github.com/blog/2012/07/30/installing-radare2-on-protostar/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Radare2 (R2) - Betrayal of the red mango</title>
+  <meta name="author" content="Eric Fode">
+
+  
+  <meta name="description" content="Radare2 (R2) debugging assembly is fun. Before I stumbled over r2 when I had to debug assembly it was a task to be dreaded with out the help of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericfode.github.com/blog/2012/07/30/radare2-r2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Betrayal of the red mango" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Betrayal of the red mango</a></h1>
+  
+    <h2>Plundering the results of bad code.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericfode.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Radare2 (R2)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T17:13:00-04:00" pubdate data-updated="true">Jul 30<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Radare2 (R2) debugging assembly is fun.</h1>
+
+<p>Before I stumbled over r2 when I had to debug assembly it was a task to be dreaded with out the help of something like IDA pro. Unfortunately I can&#8217;t always have things I want (expensive software licenses in this case), so I went out in search of an open source alternative. I was pleasantly surprised by the epic software that I found. Radare and it&#8217;s suite. Radare is a suite of tools designed to perform disassembly, assembly, analysis, cryptanalysis, patching, and a whole smorgasboard of other awesome operations on binaries. The whole suite of tools is crowned by it&#8217;s tool R2. R2 is a tool that brings all of the other unix-style tools in the suite together.</p>
+
+<p>Some of the highlights
+Debugging with radare&#8217;s internal debugger</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ r2 -d /path/to/exec</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Setting break point</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; db symbol
+</span><span class='line'>[0xb7edcf99]&gt; db address</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Either option can be used. Symbols are accessed with sym.symbolName for example</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; db sym.main</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Viewing the function that radare has seeked to (generally where eip is unless you manually seek)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; pdf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Will show the current function  (menomic print disassembly of function block)</p>
+
+<p>Analyzing the current function for structure</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; af
+</span><span class='line'>[0xb7edcf99]&gt; pdf
+</span><span class='line'>
+</span><span class='line'>|      0x080484b5     8b45f4           mov eax, [ebp-0xc]
+</span><span class='line'>|      0x080484b8     25000000bf       and eax, 0xbf000000
+</span><span class='line'>|      0x080484bd     3d000000bf       cmp eax, 0xbf000000
+</span><span class='line'>|  ,=&lt; 0x080484c2     7520             jnz loc.080484e4
+</span><span class='line'>|  |   0x080484c4     b8e4850408       mov eax, str.bzzztp
+</span><span class='line'>|  |   0x080484c9     8b55f4           mov edx, [ebp-0xc]
+</span><span class='line'>|  |   0x080484cc     89542404         mov [esp+0x4], edx
+</span><span class='line'>|  |   0x080484d0     890424           mov [esp], eax
+</span><span class='line'>|  |   0x080484d3     e8e8feffff       call dword 0x80483c0
+</span><span class='line'>|  |      ; imp.printf() (imp.printf+0)
+</span><span class='line'>|  |   0x080484d8     c7042401000000   mov dword [esp], 0x1
+</span><span class='line'>|  |   0x080484df     e8bcfeffff       call dword imp._exit
+</span><span class='line'>|  |      ; imp._exit() (imp._exit+0)
+</span><span class='line'>|  |   ; CODE (JMP) XREF 0x080484c2 (eip)
+</span><span class='line'>/ loc: loc.080484e4 (22)
+</span><span class='line'>|  |   0x080484e4  loc.080484e4:
+</span><span class='line'>|  `-&gt; 0x080484e4     b8f0850408       mov eax, str.gotpaths
+</span><span class='line'>|      0x080484e9     8d55b4           lea edx, [ebp-0x4c]
+</span><span class='line'>|      0x080484ec     89542404         mov [esp+0x4], edx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>af tells radare to analyze the current function block (analyzing the whole piece of software can take along time) and creates lots of pretty blocks like the one shown to help you find where things jump to and see functions better.</p>
+
+<p>Finding things</p>
+
+<p>You can quckly locate function symbols with by running x on a sym.name</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; x@sym.main
+</span><span class='line'>[0xb7edcf99]&gt; pdf@sym.main</span></code></pre></td></tr></table></div></figure>
+
+
+<p>the @ symbol tell radare to seek temporarily and perform the operation at a memory address.</p>
+
+<p>Find a ROP gadaget:
+radare can do magical things, one of them is compile assmebly on the fly (for what ever arch you happen to be using) and search for it&#8217;s bytes. This can be done as follows</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; s sym.main #or where ever you want to search
+</span><span class='line'>[0xb7edcf99]&gt; /a pop eax; ret; #this will start the seach i stop it with ^C because it can take for ever and genrally finds things quickly
+</span><span class='line'>[# ]^C0x0cb7e190 &lt; 0xffffffffffffffff  hits = 0
+</span><span class='line'>
+</span><span class='line'>hits: 0
+</span><span class='line'>hit1_0
+</span><span class='line'>hit1_1
+</span><span class='line'>hit1_2
+</span><span class='line'>hit1_3
+</span><span class='line'>hit1_4
+</span><span class='line'>[0xb7edcf99]&gt;f #displays all current flags (of which the hits will be)
+</span><span class='line'>0x08049644 1 hit1_4
+</span><span class='line'>0x0804935c 1 hit1_3
+</span><span class='line'>0x08049020 1 hit1_2
+</span><span class='line'>0x08048baa 1 hit1_1
+</span><span class='line'>0x08048644 1 hit1_0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All of radares find commands can be accessed through the / command (think perl regex)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; x@sym.main</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Speaking of seeking</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[0xb7edcf99]&gt; s sym.main </span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will move radare&#8217;s &#8220;cursor around&#8221;</p>
+
+<p>More to come</p>
+
+<p>Things i need to figure out:
+how to start a debug process with out restarting radare
+how to redirect input
+how to trace a variable
+how to find symbol names
+how to name memory locations (i think flags will do this)</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Fode (YodaCoder)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T17:13:00-04:00" pubdate data-updated="true">Jul 30<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/assembly/'>Assembly</a>, <a class='category' href='/blog/categories/hacking/'>Hacking</a>, <a class='category' href='/blog/categories/radare/'>Radare</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericfode.github.com/blog/2012/07/30/radare2-r2/" data-via="ericfode" data-counturl="http://ericfode.github.com/blog/2012/07/30/radare2-r2/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/30/intro-to-ragg2/" title="Previous Post: Intro To Ragg2">&laquo; Intro To Ragg2</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/31/install-radare2/" title="Next Post: Install radare2">Install radare2 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/31/install-radare2/">Install radare2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/30/radare2-r2/">Radare2 (R2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/30/intro-to-ragg2/">Intro To Ragg2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/30/installing-radare2-on-protostar/">Radare2 (R2) Install</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/ericfode">@ericfode</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'ericfode',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericfode", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericfode" class="twitter-follow-button" data-show-count="false">Follow @ericfode</a>
+  
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/ericfode?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/ericfode">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/ericfode?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Eric Fode -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'ericfode';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ericfode.github.com/blog/2012/07/30/radare2-r2/';
+        var disqus_url = 'http://ericfode.github.com/blog/2012/07/30/radare2-r2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
